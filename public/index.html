@@ -1,161 +1,192 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <title>Tron DAPP</title>
-</head>
 
-<style>
-  .login-container {
-    border: solid 1px #cccccc;
-    border-radius: 8px;
-    width: 600px;
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 42px;
-    padding-right: 42px;
-    padding-top: 30px;
-    padding-bottom: 50px;
-  }
-  .login-title{
-    text-align: center;
-    font-size: 30px;
-  }
-  .btn-login{
-    width: 100%;
-  }
-</style>
-
-<body>
-  <div class='login-container'>
-    <div class='login-title'>기능 선택</div>
-
-    <div>
-      <div class="form-group">
-        <label for="input_id">보내는 사람 주소, 개인키(잔액, 트랜젝션, 에스크로)</label>
-        <input type="text" class="form-control" id="from_address" placeholder="전지지갑 주소를 입력해주세요">
-      </div>
-    </div>
-
-    <div>
-      <div class="form-group">
-        <label for="input_pw">받는 사람 주소</label>
-        <input type="text" class="form-control" id="to_address" placeholder="받는 사람 지갑 주소를 입력해주세요">
-      </div>
-    </div>
-     <div>
-      <div class="form-group">
-        <label for="input_pw">수량</label>
-        <input type="text" class="form-control" id="value" placeholder="보낼 수량을 입력해주세요">
-      </div>
-    </div>
-
-     <div>
-      <div class="form-group">
-        <label for="result">결과</label>
-	<textarea rows="10" class="form-control" id="result" placeholder="결과"></textarea>
-	 <div id="result_2"></div>
-      </div>
-    </div>
-    <p><strong>작업</strong></p>
-	<div class="btn-group btn-group-toggle" data-toggle="buttons">
-		<label class="btn btn-danger">
-                        <input type="radio" name="jb-radio" value="login"> 로그인
-                </label>
-		<label class="btn btn-danger">
-			<input type="radio" name="jb-radio" value="createAccount"> 계좌 신청 
-		</label>
-		<label class="btn btn-danger">
-			<input type="radio" name="jb-radio" value="getBalance"> 잔액조회
-		</label>
-		<label class="btn btn-danger">
-			<input type="radio" name="jb-radio" value="sendToken"> 송금
-		</label>
-		 <label class="btn btn-danger">
-                        <input type="radio" name="jb-radio" value="transactionview"> 트랜젝션 조회
-                </label>
-                <label class="btn btn-danger">
-                        <input type="radio" name="jb-radio" value="escrow"> Escrow
-                </label>
-	</div>
-	<br/><br/><br/>
-    <button onclick='click_exec()' type="button" class="btn btn-success btn-login">실행</button>
-  <div>
-</body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
-<script>
-function click_exec(){
-
-  var f_address = $('#from_address').val();
-  var t_address = $('#to_address').val();
-  var token_value = $('#value').val();
-  var radioVal = $('input[name="jb-radio"]:checked').val();
-  alert(radioVal);
- if(radioVal=="login"){
-  	$.post( radioVal, {
-     		f_address,
-     		t_address 
-   		})
-  	.done(function( data ) {
-    		if(data.result == 'true'){
-	     		document.getElementById("result").value ="success 개발중 index 페이지 리다이렉트";
-    		} else {
-	     	document.getElementById("result").value ="error 로그인 실패 아이디 또는 패스워드를 확인해주세요";
-    		}
-	})
-} else if(radioVal=="createAccount"){
-	 //$.ajaxSetup({async:false});
-	 //alert(radioVal);
-	 $.post( radioVal, {
-                f_address
-                })
-	 .done(function( data ) {
-                 	document.getElementById("result").value = data.result;
-	 })
-} else if(radioVal=="getBalance"){
-         //$.ajaxSetup({async:false});
-         //alert(radioVal);
-         $.post( radioVal, {
-                f_address 
-                })
-         .done(function( data ) {
-                        document.getElementById("result").value = data.result;
-         })
-} else if(radioVal=="transactionview"){
-         //$.ajaxSetup({async:false});
-         alert(radioVal);
-	 let html = ''
-         $.post( radioVal, {
-                f_address
-                })
-         .done(function( data ) {
-		$.each(data.result, function() {
-		//alert('block:'+this.block+', hash:'+this.hash);
-			html +='block : ' + this.block + ', hash: '+this.hash + 'timestamp : '+this.timestamp +' fromAddress:'+this.ownerAddress +' toAddress:'+this.toAddress +' assetname:'+this.assetname +  '<br/><br/>';
-		});
-	$('#result').html(html);
-	 })
-
-	} else if(radioVal=="escrow"){
-         //$.ajaxSetup({async:false});
-         //alert(radioVal);
-         $.post( radioVal, {
-                f_address,
-		t_address,
-		token_value
-                })
-         .done(function( data ) {
-                        document.getElementById("result").value = data.result;
-         })
-
+<!DOCTYPE html><html lang="ko"><head><title>The Ethereum Block Explorer</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"><link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous"><link rel="stylesheet" href="/stylesheets/style.css"><script src="//code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><script src="//cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script><script src="//cdn.jsdelivr.net/npm/vue"></script><script>var web3;
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+} else {
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
+</script></head><body><nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"><a href="/" class="navbar-brand text-uppercase">Ether Expolorer</a><button type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"> <span class="navbar-toggler-icon"></span></button><div id="navbarsDefault" class="collapse navbar-collapse"><ul class="navbar-nav mr-auto"><li class="nav-item"><a href="/" class="nav-link">Home<span class="sr-only">(current)</span></a></li><li class="nav-item"><a href="/watch" class="nav-link">Watch</a></li></ul><form id="searchForm" class="form-inline my-2 my-lg-0"><input type="search" name="search" size="50" placeholder="Search for Account, Tx Hash or Data" aria-label="Search" required autofocus class="form-control mr-sm-2"><button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button></form></div></nav><main role="main" class="container"><div id="app"><table class="table _table-striped table-bordered _table-dark w-100"><thead class="thead-light"><tr><th width="14%">Current Block</th><th width="14%">API Version</th><th width="14%">Client/Node Version</th><th width="14%">Network Protocol  Version</th><th width="*">Current Gas Price</th><th width="14%">Hashrate</th><th width="14%">Number of Peers</th></tr></thead><tr><td><a v-bind:href="'/block/' + blockNumber">{{ blockNumber }}</a></td><td>{{ api }}</td><td>{{ node }}</td><td>{{ network }}</td><td>{{ gasPrice }}</td><td>{{ hashrate }}</td><td>{{ peerCount }}</td></tr></table><h1> <i class="fa fa-cubes"></i><span class="ml-1">Recent Blocks</span></h1><table class="table table-striped _table-bordered _table-dark w-100"><thead class="_thead-light"><tr><th>Block #</th><th># of Txs</th><th>Size</th><th>Gas Limit</th><th>Gas Used</th><th>Timestamp</th></tr></thead><tbody><tr v-if="blocks.length === 0"><td colspan="6"> <div style="text-align:center"><i class="fas fa-2x fa-spinner fa-pulse"> </i></div></td></tr><tr v-for="block in blocks" v-if="blocks.length &gt; 0"><td>      <a v-bind:href="'/block/' + block.number.toString(10)">{{ block.number.toString(10) }}</a></td><td>{{ block.transactions.length }}</td><td>{{ block.size }} bytes</td><td>{{ block.gasLimit }} </td><td>{{ block.gasUsed }} </td><td>{{ new Date(block.timestamp * 1000).toGMTString() }}</td></tr></tbody></table><h1> <i class="fas fa-exchange-alt"></i><span class="ml-1">Recent Transactions</span></h1><table class="table table-striped _table-bordered _table-dark w-100"><thead class="_thead-light"><tr><th>TxHash</th><th>Block</th><th>Value</th><th>From </th><th>To</th><th>Gas Used</th><th>Gas Price</th><th>Tx Fee</th></tr></thead><tbody><tr v-if="txs.length === 0"><td colspan="8"> <div style="text-align:center"><i class="fas fa-2x fa-spinner fa-pulse"> </i></div></td></tr><tr v-for="tx in txs" v-if="txs.length &gt; 0"><td>      <a v-bind:href="'/tx/' + tx.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ tx.hash }}</a></td><td> <a v-bind:href="'/block/' + tx.blockNumber.toString(10)">{{ tx.blockNumber.toString(10) }}</a></td><td>{{ web3.fromWei(tx.value, 'ether').toString(10) + ' ETH' }}</td><td><a v-bind:href="'/address/' + tx.from" style="max-width:150px" class="d-inline-block text-truncate">{{ tx.from }}</a></td><td> <span v-if="tx.to === '0x0'">{{ tx.to }}</span><a v-if="tx.to !== '0x0'" v-bind:href="'/address/' + tx.to" style="max-width:150px" class="d-inline-block text-truncate">{{ tx.to }}</a></td><td>{{ tx.gas.toString(10) }}</td><td>{{ web3.fromWei(tx.gasPrice, 'ether').toString(10) + ' ETH' }}</td><td>{{ web3.fromWei((tx.gas * tx.gasPrice), 'ether').toString(10) + ' ETH' }}</td></tr></tbody></table></div><script>var app = new Vue({
+  el: '#app',
+  data: { 
+    api: null,
+    node: null,
+    network: null,
+    gasPrice: null,
+    hashrate: null,
+    peerCount: null,
+    blockNumber: null,
+    blocks: [],
+    txs:[]
+  },
+  created: function() {
+    init.bind(this)();
+  }
+});
+
+function getNetwork() {
+  return new Promise((res, rej) => {
+    web3.version.getNetwork((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
 }
-</script>
-</html>
+
+function getNode() {
+  return new Promise((res, rej) => {
+    web3.version.getNode((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getPeerCount() {
+  return new Promise((res, rej) => {
+    web3.net.getPeerCount((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getHashrate() {
+  return new Promise((res, rej) => {
+    web3.eth.getHashrate((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getBlockNumber() {
+  return new Promise((res, rej) => {
+    web3.eth.getBlockNumber((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getGasPrice(hashStringOrBlockNumber) {
+  return new Promise((res, rej) => {
+    web3.eth.getGasPrice((error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getBlock(hashStringOrBlockNumber, returnTransactionObjects) {
+  return new Promise((res, rej) => {
+    web3.eth.getBlock(hashStringOrBlockNumber, returnTransactionObjects, (error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+function getTransaction(hash) {
+  return new Promise((res, rej) => {
+    web3.eth.getTransaction(hash, (error, result) => {
+      if(error) rej(error);
+      else res(result);
+    });
+  });
+}
+
+async function getRecentBlocks(currentBlockNumber, maxCnt, returnTransactionObjects) {
+  var blocks = [];
+  for (var i=0, s=(maxCnt || 10); i < s && currentBlockNumber - i >= 0; i++) {
+    const block = await getBlock(currentBlockNumber - i, returnTransactionObjects)
+    blocks.push(block);
+  }
+  return blocks;
+}
+
+async function getRecentTxs(txhashs, maxCnt) {
+  var txs = [];
+  for (var i=0, l=txhashs.length, s=(maxCnt || 20)-1; i < s && i < l; i++) {
+    var hash = txhashs[i];
+    if( hash && hash.length )
+      txs.push(await getTransaction(hash));
+  }
+  return txs;
+}
+
+// init Function
+async function init() {
+  var self = app || this;
+
+  //- getNode().then(r=>console.log(r));
+  self.api = web3.version.api;
+  getNode().then(r =>  self.node = r);
+  getNetwork().then(r =>  self.network = r);
+  getHashrate().then(r =>  self.hashrate = r);
+  getPeerCount().then(r =>  self.peerCount = r);
+  //- getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'ether').toString(10) + ' ETH)');
+  getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'gwei').toString(10) + ' Gwei)');
+
+  var blockNumber = await getBlockNumber();
+  self.blockNumber = blockNumber;
+
+  self.blocks = await getRecentBlocks(blockNumber, 10, true);
+  //- console.log(self.blocks);
+
+  // getTransactionFromBlock(hashStringOrNumber, indexNumber [, callback])
+  //- var transactions = app.blocks.map(e=>e?e.transactions:null).join(',').split(",");
+  //- self.txs = await getRecentTxs(transactions);
+
+  var transactions = [];
+  self.blocks.forEach(function(block) {
+    //- console.log(e.transactions);
+    if( block && block.transactions && block.transactions.length )
+      transactions = transactions.concat(block.transactions);
+  });
+  self.txs = transactions;
+
+  web3.eth.filter("latest", function(error, result){
+    if (!error) {
+      //- console.log(result);
+      getBlock(result, true).then(block => {
+        //- console.log(block);
+        app.blocks.unshift(block);
+        app.blocks.pop();
+        //- getRecentTxs(block.transactions).then(r => app.$data.txs.unshift(r) );
+
+        if( block.transactions.length ) {
+          app.txs = block.transactions.concat(app.txs);
+        }
+      });
+    }
+  });
+}</script></main><script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script><script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script><script>$("#navbarsDefault a").each(function(i, e){
+  if( location.href == e.href ) {
+    e.closest("li.nav-item").classList.add("active");
+  }
+});
+
+// search form
+$('#searchForm').submit(function(evt) {
+  evt.preventDefault();
+  var search = evt.target.search.value;
+  //- console.log(search, ", ", search.length);
+
+  //- search = search.split('0x').join('');
+  //- var regexpTx = /[0-9a-zA-Z]{64}?/;
+  //- //var regexpAddr =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/; // TODO ADDR REGEX or use isAddress(hexString) API ?
+  //- var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ETH Regular Expression for Addresses
+  //- var regexpBlock = /[0-9]{1,7}?/;
+  //- var result =regexpTx.test(search);
+
+  if( search.length === 66 ) { //tx hash
+    location.href = '/tx/' + search;
+  } else if( search.length === 42 && web3.isAddress(search) ) {
+    location.href = '/address/' + search;
+  } else if( search <= blockNumber ) {
+    location.href = '/block/' + search;
+  } else {
+    console.log('what?');
+  }      
+  
+});</script></body></html>
