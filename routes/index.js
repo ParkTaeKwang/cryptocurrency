@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/block/:number/', function (req, res, next) {
   var number = req.params['number'];
-  res.sendfile('public/block.html', {
+  res.render('../public/block.html', {
     title: 'Block',
     number: number
   });
@@ -34,7 +34,7 @@ router.get('/tx/:hash/', function (req, res, next) {
 
 router.get('/address/:address/', function (req, res, next) {
   var address = req.params['address'];
-  res.sendfile('public/address.html', {
+  res.render('../public/address.html', {
     title: 'Address',
     address: address
   });
