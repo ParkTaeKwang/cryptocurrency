@@ -18,13 +18,13 @@ router.get('/block/:number/', function (req, res, next) {
 
 router.get('/tx/:hash/', function (req, res, next) {
   var hash = req.params['hash'];
-  res.render('transaction', {
+  res.render('../public/transaction.html', {
     title: 'Transaction',
     hash: hash
   });
 });
 
-router.get('/tx/:hash/', function (req, res, next) {
+router.get('/t1111x/:hash/', function (req, res, next) {
   var hash = req.params['hash'];
   res.render('transaction', {
     title: 'Transaction',

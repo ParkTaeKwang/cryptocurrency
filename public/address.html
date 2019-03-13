@@ -79,7 +79,7 @@ if (typeof web3 !== 'undefined') {
 <script>var app = new Vue({
   el: '#app',
   data: { 
-    address: <%=address%>,
+    address: "<%=address%>",
     balance: null,
     balance_eth: null,
     balance_usd: null,
@@ -93,7 +93,7 @@ if (typeof web3 !== 'undefined') {
     }
   },
   created: function() {
-    getAddressInfo.bind(this)();
+    getAddressInfo.bind(this)(this.address);
   }
 });
 function getBalance(address) {
