@@ -101,15 +101,26 @@ if (typeof web3 !== 'undefined') {
     getAddressInfo.bind(this)(this.address);
   }
 });
+function txsearch(address) {
+  return new Promise((res, rej) => {
+	  alert(address);
+	  $.getJSON("https://ropsten.etherscan.io/api?module=account&action=txlist&address=<%=address%>&startblock=0&endblock=99999999&page=1&offset=30&sort=desc&apikey=FQKHWXWSND7YUBZWMSD2IUYAHUEC8BC1YK", function(json) {
+	  var txresult = json.result[0].hash;
+	  alert(json);
+          res(txresult);
+    });
+  });
+}
 async function getAddressInfo(address) {
   var self = app || this;
   address = address || self.address;
-  self.TxHash  = await "1111111111111111111";
+  self.TxHash  = await txsearch(address);
+  //self.TxHash = "TXHASH";
   self.Age = await "1111111111111111111";
-  self.From = await "1111111111111111111";
-  self.To = await "1111111111111111111";
-  self.Value = await "1111111111111111111";
-  self.TxFee = await "1111111111111111111";
+  self.From = await "11";
+  self.To = await "111";
+  self.Value = await "11";
+  self.TxFee = await "1";
 }
 </script>
 </main>
