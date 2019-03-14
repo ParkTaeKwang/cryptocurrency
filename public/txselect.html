@@ -32,141 +32,88 @@ if (typeof web3 !== 'undefined') {
 <h1>Address<span class="text-muted ml-2 sub"><%=address%></span></h1>
 <div id="app" v-cloak>
 	<table class="table table-striped table-bordered _table-sm w-100">
-	<thead>
-	<tr>
-		<th class="w-25">
-			Balance
-		</th>
-		 <th>
-                        Balance(USD)
+        <thead>
+        <tr>
+                <th class="w-25">
+                        TxHash
+                </th>
+                 <th>
+                        Age
                 </th>
 
-		<th>
-                        Storage
+                <th>
+                       From
                 </th>
 
-		 <th>
-                        Transaction Count
+                 <th>
+                       To
                 </th>
-	</tr><tr>
-		<td>
-			<i v-if="balance===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ balance }} {{ balance_eth }}
-		</td>
-		<td>
-			<i v-if="balance_usd===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ balance_usd }}
-		</td>
-		<td>
-			<i v-if="storage===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{  }}
-		</td>
-		<td>
-			<i v-if="transactionCount===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ transactionCount }}
-		</td>
-	</tr>
-	</thead>
+
+                <th>
+                      Value
+                </th>
+
+                <th>
+                      TxFee
+                </th>
+
+        </tr><tr>
+                <td>
+                        <i v-if="TxHash===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ TxHash }}
+                </td>
+                <td>
+                        <i v-if="Age===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ Age }}
+                </td>
+                <td>
+                        <i v-if="From===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ From }}
+                </td>
+                <td>
+                        <i v-if="To===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ To }}
+                </td>
+                <td>
+                        <i v-if="Value===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ Value }}
+                </td>
+
+                <td>
+                        <i v-if="TxFee===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ TxFee }}
+                </td>
+        </tr>
+        </thead>
 	</table>
 </div>
 <script>var app = new Vue({
   el: '#app',
   data: { 
     address: "<%=address%>",
-    balance: null,
-    balance_eth: null,
-    balance_usd: null,
-    storage: null,
-    code: null,
-    transactionCount: null,
+    TxHash: null,
+    Age: null,
+    From: null,
+    To: null,
+    Value: null,
+    TxFee: null,
   },
   computed: {
     isContract: function() {
-      return (this.code && this.code.length > 3);
+      return (this.code && this.code.length > 0);
     }
   },
   created: function() {
     getAddressInfo.bind(this)(this.address);
   }
 });
-function getBalance(address) {
-  return new Promise((res, rej) => {
-    web3.eth.getBalance(address, (error, result) => {
-      if(error) rej(error);
-      else res(result.toString(10));
-    });
-  });
-}
-function getStorageAt(address) {
-  return new Promise((res, rej) => {
-    web3.eth.getStorageAt(address, (error, result) => {
-      if(error) rej(error);
-      else res(result);
-    });
-  });
-}
-function getCode(address) {
-  return new Promise((res, rej) => {
-    web3.eth.getCode(address, (error, result) => {
-      if(error) rej(error);
-      else res(result);
-    });
-  });
-}
-function getTransactionCount(address) {
-  return new Promise((res, rej) => {
-    web3.eth.getTransactionCount(address, (error, result) => {
-      if(error) rej(error);
-      else res(result);
-    });
-  });
-}
-function getETHUSD(balance) {
-  return new Promise((res, rej) => {
-    $.getJSON("https://api.coinmarketcap.com/v1/ticker/ethereum/", function(json) {
-      var price = Number(json[0].price_usd);
-      var ethusd = price.toFixed(2);
-      var balanceusd = "$ " + (ethusd * balance);
-      res(balanceusd);
-    });
-  });
-}
 async function getAddressInfo(address) {
   var self = app || this;
   address = address || self.address;
-  self.balance = await getBalance(address);
-  self.balance_eth = '(' + web3.fromWei(app.balance, 'ether').toString(10) + ' ETH)';
-  self.storage = await getStorageAt(address);
-  self.code = await getCode(address);
-  //- if( self.code.length > 3) self.isContract
-  //- console.log('code: ', JSON.stringify(self.code, '', 2));
-  self.transactionCount = await getTransactionCount(address);
-  self.balance_usd = await getETHUSD(web3.fromWei(app.balance, 'ether'));
-}</script>
+  self.TxHash  = await "1111111111111111111";
+  self.Age = await "1111111111111111111";
+  self.From = await "1111111111111111111";
+  self.To = await "1111111111111111111";
+  self.Value = await "1111111111111111111";
+  self.TxFee = await "1111111111111111111";
+}
+</script>
 </main>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-<script>$("#navbarsDefault a").each(function(i, e){
-  if( location.href == e.href ) {
-    e.closest("li.nav-item").classList.add("active");
-  }
-});
-// search form
-$('#searchForm').submit(function(evt) {
-  evt.preventDefault();
-  var search = evt.target.search.value;
-  //- console.log(search, ", ", search.length);
-  //- search = search.split('0x').join('');
-  //- var regexpTx = /[0-9a-zA-Z]{64}?/;
-  //- //var regexpAddr =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/; // TODO ADDR REGEX or use isAddress(hexString) API ?
-  //- var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ETH Regular Expression for Addresses
-  //- var regexpBlock = /[0-9]{1,7}?/;
-  //- var result =regexpTx.test(search);
-  if( search.length === 66 ) { //tx hash
-    location.href = '/tx/' + search;
-  } else if( search.length === 42 && web3.isAddress(search) ) {
-    location.href = '/address/' + search;
-  } else if( search <= blockNumber ) {
-    location.href = '/block/' + search;
-  } else {
-    console.log('what?');
-  }      
-});</script>
 </body>
 </html>
