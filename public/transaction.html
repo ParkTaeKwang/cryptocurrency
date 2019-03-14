@@ -29,7 +29,7 @@ if (typeof web3 !== 'undefined') {
 	</form>
 </div>
 </nav><main role="main" class="container">
-<h1>Transaction<span class="text-muted ml-2 sub">0xe5010fde83f85312b8fc9eeb8e218848bec6c858b4b6c69e903c2476acd55fad</span></h1>
+<h1>Transaction<span class="text-muted ml-2 sub">0x51ae8c28466e0671f19557b9e93116f2e7ac5951fd39aa4d541add47717b6a9f</span></h1>
 <div id="app" v-cloak>
 	<div class="text-right">
 		<button v-if="isContractCreation" class="btn btn-danger btn-sm mr-2">Contract Creation</button><button class="btn btn-primary btn-sm"><span v-if="confirmations===null"><i class="fas fa-spinner fa-pulse"></i><span class="ml-1">Confirmations</span></span><span>{{ confirmations }}</span></button>
@@ -216,12 +216,12 @@ if (typeof web3 !== 'undefined') {
 	</tr>
 	</table>
 </div>
-<script>var hash = <%= hash %>;
+<script>var hash = "<%= hash %>";
 var app = new Vue({
   el: '#app',
   data: {
     isShow: false,
-    hash: <%=hash%>,
+    hash: "<%= hash %>",
     confirmations: null,
     tx: {},
     txReceipt: {},
@@ -233,7 +233,7 @@ var app = new Vue({
 });
 function getBlockNumber() {
   return new Promise((res, rej) => {
-    await web3.eth.getBlockNumber((error, result) => {
+    web3.eth.getBlockNumber((error, result) => {
       if(error) rej(error);
       else res(result);
     });
@@ -241,7 +241,7 @@ function getBlockNumber() {
 }
 function getTransaction(hash) {
   return new Promise((res, rej) => {
-    await web3.eth.getTransaction(hash, (error, result) => {
+    web3.eth.getTransaction(hash, (error, result) => {
       if(error) rej(error);
       else res(result);
     });
@@ -250,7 +250,7 @@ function getTransaction(hash) {
 // 트랜잭션의 receipt 를 조회
 function getTransactionReceipt(hash) {
   return new Promise((res, rej) => {
-    await web3.eth.getTransactionReceipt(hash, (error, result) => {
+    web3.eth.getTransactionReceipt(hash, (error, result) => {
       if(error) rej(error);
       else res(result);
     });
@@ -258,7 +258,7 @@ function getTransactionReceipt(hash) {
 }
 function getCode(contractAddress) {
   return new Promise((res, rej) => {
-    await web3.eth.getCode(contractAddress, (error, result) => {
+    web3.eth.getCode(contractAddress, (error, result) => {
       if(error) rej(error);
       else res(result);
     });
@@ -271,10 +271,10 @@ async function getTransactionInfo(hash) {
     var tx = await getTransaction(hash);
     self.isContractCreation = (tx.input.indexOf('0x6060604052') === 0);
     //-  console.log(tx);
-    tx.transactionPrice = await web3.fromWei(tx.gas * tx.gasPrice, 'ether').toString(10) + ' ETH';
-    if(tx.value > 0) tx.value_eth = await ' (' +  web3.fromWei(tx.value, 'ether').toString(10) + ' ETH)';
+    tx.transactionPrice = web3.fromWei(tx.gas * tx.gasPrice, 'ether').toString(10) + ' ETH';
+    if(tx.value > 0) tx.value_eth = ' (' +  web3.fromWei(tx.value, 'ether').toString(10) + ' ETH)';
     tx.value = tx.value.toString(10);
-    if(tx.gasPrice > 0) tx.gasPrice_gwei = await ' (' +  web3.fromWei(tx.gasPrice, 'Gwei').toString(10) + ' Gwei)';
+    if(tx.gasPrice > 0) tx.gasPrice_gwei = ' (' +  web3.fromWei(tx.gasPrice, 'Gwei').toString(10) + ' Gwei)';
     tx.gasPrice = tx.gasPrice.toString(10);
     self.tx = tx;
     self.txReceipt = await getTransactionReceipt(hash);

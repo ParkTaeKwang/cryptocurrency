@@ -24,14 +24,6 @@ router.get('/tx/:hash/', function (req, res, next) {
   });
 });
 
-router.get('/t1111x/:hash/', function (req, res, next) {
-  var hash = req.params['hash'];
-  res.render('transaction', {
-    title: 'Transaction',
-    hash: hash
-  });
-});
-
 router.get('/address/:address/', function (req, res, next) {
   var address = req.params['address'];
   res.render('../public/address.html', {
