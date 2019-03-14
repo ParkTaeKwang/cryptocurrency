@@ -32,16 +32,14 @@ router.get('/address/:address/', function (req, res, next) {
   });
 });
 
-router.get('/watch', function (req, res, next) {
-  res.render('watch', {
-    title: 'Watch'
+router.get('/txselect/:address/', function (req, res, next) {
+  var address = req.params['address'];
+  res.render('../public/txselect.html', {
+    title: 'Transaction select Address',
+    address: address
   });
 });
 
-router.post('/decoder', function (req, res, next) {
-  // req.body.data
-  res.json({});
-});
 
 module.exports = router;
 /*
