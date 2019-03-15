@@ -30,11 +30,11 @@ if (typeof web3 !== 'undefined') {
 </div>
 </nav><main role="main" class="container">
 <h1>Address<span class="text-muted ml-2 sub"><%=address%></span></h1>
-<div id="app" v-cloak>
+<div id="app" v-cloak >
 	<table class="table table-striped table-bordered _table-sm w-100">
         <thead>
         <tr>
-                <th class="w-25">
+                <th class="w-5">
                         TxHash
                 </th>
                  <th>
@@ -112,12 +112,14 @@ async function getAddressInfo(address) {
   var self = app || this;
   address = address || self.address;
   var DataResult = await txsearch(address);
-  self.TxHash  = DataResult.result[0].hash;
-  self.Age = DataResult.result[0].timeStamp;
-  self.From = DataResult.result[0].from;
-  self.To = DataResult.result[0].to;
-  self.Value = DataResult.result[0].value;
-  self.TxFee = DataResult.result[0].gasUsed;
+  for(var i=0; i<DataResult.result.length; i++){
+  	self.TxHash  = DataResult.result[i].hash;
+  	self.Age = DataResult.result[i].timeStamp;
+  	self.From = DataResult.result[i].from;
+  	self.To = DataResult.result[i].to;
+  	self.Value = DataResult.result[i].value;
+  	self.TxFee = DataResult.result[i].gasUsed;
+  }
 }
 </script>
 </main>
