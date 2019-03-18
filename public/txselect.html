@@ -1,6 +1,7 @@
+
 <!DOCTYPE html><html lang="ko">
 <head>
-<title>Address</title>
+<title>The Ethereum Block Explorer</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -27,54 +28,53 @@ if (typeof web3 !== 'undefined') {
 		<input type="search" name="search" size="50" placeholder="Search for Account, Tx Hash or Data" aria-label="Search" required autofocus class="form-control mr-sm-2"><button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
 	</form>
 </div>
-</nav>
-<h1>Address<span class="text-muted ml-2 sub"><%=address%></span></h1>
-<div id="app" v-cloak >
-	<h1><i class="fas fa-exchange-alt"></i><span class="ml-1">Account TX Expolorer</span></h1>
+</nav><main role="main" class="container">
+<div id="app">
+	<h1><i class="fas fa-exchange-alt"></i><span class="ml-1">Account TX Expolorer</span><span class="text-muted ml-2 sub"><%=address%></span></h1>
 	<table class="table table-striped _table-bordered _table-dark w-100">
-	<thead class="thead-light">
-	<tr>
+        <thead class="thead-light">
+        <tr>
                 <th width="14%">
                         TxHash
                 </th>
-		<th width="14%">
+                <th width="14%">
                         Age
                 </th>
-		<th width="14%">
+                <th width="14%">
                        From
                 </th>
-		<th width="14%">
+                <th width="14%">
                        To
                 </th>
-		<th width="14%">
+                <th width="14%">
                       Value
                 </th>
-		<th width="14%">
+                <th width="14%">
                       TxFee
                 </th>
 
         </tr>
-	</thead>
+        </thead>
 	<tbody>
-	<tr v-if="items.length===0">
-		<td colspan="8">
-			<div style="text-align:center">
-				<i class="fas fa-2x fa-spinner fa-pulse"></i>
-			</div>
-		</td>
-	</tr>
-	<tr v-for="item in items">
+		<tr v-if="items.length===0">
+                <td colspan="6">
+                        <div style="text-align:center">
+                                <i class="fas fa-2x fa-spinner fa-pulse"></i>
+                        </div>
+                </td>
+        </tr>
+        <tr v-for="item in items">
                 <td>
-			<a href="'../tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
+                        <a href="'../tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
                 </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ new Date(Number(item.timestamp * 1000)).toGMTString() }}
                 </td>
                 <td>
-			<a href="'/address/' + item.from" style="max-width:150px" class="d-inline-block text-truncate">{{ item.from }}</a>
+                        <a href="'/address/' + item.from" style="max-width:150px" class="d-inline-block text-truncate">{{ item.from }}</a>
                 </td>
                 <td>
-			<a href="'/address/' + item.to" style="max-width:150px" class="d-inline-block text-truncate">{{ item.to }}</a>
+                        <a href="'/address/' + item.to" style="max-width:150px" class="d-inline-block text-truncate">{{ item.to }}</a>
                 </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.value }}
@@ -84,17 +84,15 @@ if (typeof web3 !== 'undefined') {
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.gasUsed }}
                 </td>
         </tr>
-	</tbody>
-	</table>
+        </tbody>
+        </table>
+
 </div>
 <script>var app = new Vue({
   el: '#app',
-  data: { 
+  data: {
     address: "<%=address%>",
-    items: [
-        //{ ownername: 'admin', date: '2018-07-19', description: '<a href="www.naver.com">링크가 들어갔어요.</a>' },
-        //{ ownername: '홍길동' ,    date: '2018-07-20', description: '<b>글씨가 들어갔어요</b>'}
-            ]
+    items: []
   },
   computed: {
     isContract: function() {
@@ -107,7 +105,7 @@ if (typeof web3 !== 'undefined') {
 });
 function txsearch(address) {
   return new Promise((res, rej) => {
-	  $.getJSON("https://ropsten.etherscan.io/api?module=account&action=txlist&address=<%=address%>&startblock=0&endblock=99999999&page=1&offset=30&sort=desc&apikey=FQKHWXWSND7YUBZWMSD2IUYAHUEC8BC1YK", function(json) {
+          $.getJSON("https://ropsten.etherscan.io/api?module=account&action=txlist&address=<%=address%>&startblock=0&endblock=99999999&page=1&offset=30&sort=desc&apikey=FQKHWXWSND7YUBZWMSD2IUYAHUEC8BC1YK", function(json) {
           res(json);
     });
   });
@@ -117,21 +115,49 @@ async function getAddressInfo(address) {
   address = address || self.address;
   var DataResult = await txsearch(address);
   for(var i=0; i<DataResult.result.length; i++){
-	  var info = {
-  		hash: DataResult.result[i].hash,
-  		timeStamp: DataResult.result[i].timeStamp,
-  		from: DataResult.result[i].from,
-  		to: DataResult.result[i].to,
-  		value: DataResult.result[i].value,
-  		gasUsed: DataResult.result[i].gasUsed
-	  };
-	  self.items.push(info);
+          var info = {
+                hash: DataResult.result[i].hash,
+                timeStamp: DataResult.result[i].timeStamp,
+                from: DataResult.result[i].from,
+                to: DataResult.result[i].to,
+                value: DataResult.result[i].value,
+                gasUsed: DataResult.result[i].gasUsed
+          };
+          self.items.push(info);
 
   }
 }
 </script>
+
 </main>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>$("#navbarsDefault a").each(function(i, e){
+  if( location.href == e.href ) {
+    e.closest("li.nav-item").classList.add("active");
+  }
+});
+// search form
+$('#searchForm').submit(function(evt) {
+  evt.preventDefault();
+  var search = evt.target.search.value;
+  //- console.log(search, ", ", search.length);
+  //- search = search.split('0x').join('');
+  //- var regexpTx = /[0-9a-zA-Z]{64}?/;
+  //- //var regexpAddr =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/; // TODO ADDR REGEX or use isAddress(hexString) API ?
+  //- var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ETH Regular Expression for Addresses
+  //- var regexpBlock = /[0-9]{1,7}?/;
+  //- var result =regexpTx.test(search);
+  if( search.length === 66 ) { //tx hash
+    location.href = '/tx/' + search;
+  } else if( search.length === 42 && web3.isAddress(search) ) {
+    location.href = '/address/' + search;
+  } else if( search <= blockNumber ) {
+    location.href = '/block/' + search;
+  } else {
+    console.log('what?');
+  }      
+});</script>
 </body>
 </html>
+
