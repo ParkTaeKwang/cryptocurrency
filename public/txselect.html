@@ -59,23 +59,23 @@ if (typeof web3 !== 'undefined') {
 
         </tr><tr v-for="item in items">
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.hash }}
                 </td>
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.date }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
                 </td>
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.description }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.From }}
                 </td>
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.To }}
                 </td>
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.Value }}
                 </td>
 
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.TxFee }}
                 </td>
         </tr>
         </thead>
@@ -86,8 +86,8 @@ if (typeof web3 !== 'undefined') {
   data: { 
     address: "<%=address%>",
     items: [
-        { ownername: 'admin', date: '2018-07-19', description: '<a href="www.naver.com">링크가 들어갔어요.</a>' },
-        { ownername: '홍길동' ,    date: '2018-07-20', description: '<b>글씨가 들어갔어요</b>'}
+        //{ ownername: 'admin', date: '2018-07-19', description: '<a href="www.naver.com">링크가 들어갔어요.</a>' },
+        //{ ownername: '홍길동' ,    date: '2018-07-20', description: '<b>글씨가 들어갔어요</b>'}
             ]
   },
   computed: {
@@ -96,7 +96,7 @@ if (typeof web3 !== 'undefined') {
     }
   },
   created: function() {
-    //getAddressInfo.bind(this)(this.address);
+    getAddressInfo.bind(this)(this.address);
   }
 });
 function txsearch(address) {
@@ -111,12 +111,16 @@ async function getAddressInfo(address) {
   address = address || self.address;
   var DataResult = await txsearch(address);
   for(var i=0; i<DataResult.result.length; i++){
-  	todos.TxHash.push  = DataResult.result[i].hash;
-  	todos.Age.push = DataResult.result[i].timeStamp;
-  	todos.From.push = DataResult.result[i].from;
-  	todos.To.push = DataResult.result[i].to;
-  	todos.Value.push = DataResult.result[i].value;
-  	todos.TxFee.push = DataResult.result[i].gasUsed;
+	  var info = {
+  		hash: DataResult.result[i].hash,
+  		timeStamp: DataResult.result[i].timeStamp,
+  		from: DataResult.result[i].from,
+  		to: DataResult.result[i].to,
+  		Value: DataResult.result[i].value,
+  		gasUsed: DataResult.result[i].gasUsed
+	  };
+	  self.items.push(info);
+
   }
 }
 </script>
