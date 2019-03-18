@@ -28,7 +28,7 @@ if (typeof web3 !== 'undefined') {
 		<input type="search" name="search" size="50" placeholder="Search for Account, Tx Hash or Data" aria-label="Search" required autofocus class="form-control mr-sm-2"><button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
 	</form>
 </div>
-</nav><main role="main" class="container">
+</nav>
 <h1>Address<span class="text-muted ml-2 sub"><%=address%></span></h1>
 <div id="app" v-cloak >
 	<table class="table table-striped table-bordered _table-sm w-100">
@@ -57,25 +57,25 @@ if (typeof web3 !== 'undefined') {
                       TxFee
                 </th>
 
-        </tr><tr>
+        </tr><tr v-for="item in items">
                 <td>
-                        <i v-if="TxHash===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ TxHash }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
                 </td>
                 <td>
-                        <i v-if="Age===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ Age }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.date }}
                 </td>
                 <td>
-                        <i v-if="From===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ From }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.description }}
                 </td>
                 <td>
-                        <i v-if="To===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ To }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
                 </td>
                 <td>
-                        <i v-if="Value===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ Value }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
                 </td>
 
                 <td>
-                        <i v-if="TxFee===null" class="fas fa-lg fa-spinner fa-pulse"></i>{{ TxFee }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.ownername }}
                 </td>
         </tr>
         </thead>
@@ -85,12 +85,10 @@ if (typeof web3 !== 'undefined') {
   el: '#app',
   data: { 
     address: "<%=address%>",
-    TxHash: null,
-    Age: null,
-    From: null,
-    To: null,
-    Value: null,
-    TxFee: null,
+    items: [
+        { ownername: 'admin', date: '2018-07-19', description: '<a href="www.naver.com">링크가 들어갔어요.</a>' },
+        { ownername: '홍길동' ,    date: '2018-07-20', description: '<b>글씨가 들어갔어요</b>'}
+            ]
   },
   computed: {
     isContract: function() {
@@ -98,7 +96,7 @@ if (typeof web3 !== 'undefined') {
     }
   },
   created: function() {
-    getAddressInfo.bind(this)(this.address);
+    //getAddressInfo.bind(this)(this.address);
   }
 });
 function txsearch(address) {
@@ -113,12 +111,12 @@ async function getAddressInfo(address) {
   address = address || self.address;
   var DataResult = await txsearch(address);
   for(var i=0; i<DataResult.result.length; i++){
-  	self.TxHash  = DataResult.result[i].hash;
-  	self.Age = DataResult.result[i].timeStamp;
-  	self.From = DataResult.result[i].from;
-  	self.To = DataResult.result[i].to;
-  	self.Value = DataResult.result[i].value;
-  	self.TxFee = DataResult.result[i].gasUsed;
+  	todos.TxHash.push  = DataResult.result[i].hash;
+  	todos.Age.push = DataResult.result[i].timeStamp;
+  	todos.From.push = DataResult.result[i].from;
+  	todos.To.push = DataResult.result[i].to;
+  	todos.Value.push = DataResult.result[i].value;
+  	todos.TxFee.push = DataResult.result[i].gasUsed;
   }
 }
 </script>
