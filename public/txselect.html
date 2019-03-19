@@ -34,22 +34,22 @@ if (typeof web3 !== 'undefined') {
 	<table class="table table-striped _table-bordered _table-dark w-100">
         <thead class="thead-light">
         <tr>
-                <th width="14%">
+                <th width="20%">
                         TxHash
                 </th>
-                <th width="14%">
+                <th width="20%">
                         Age
                 </th>
-                <th width="14%">
+                <th width="20%">
                        From
                 </th>
-                <th width="14%">
+                <th width="20%">
                        To
                 </th>
-                <th width="14%">
+                <th width="20%">
                       Value
                 </th>
-                <th width="14%">
+                <th width="20%">
                       TxFee
                 </th>
 
@@ -68,7 +68,7 @@ if (typeof web3 !== 'undefined') {
                         <a href="'../tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
                 </td>
                 <td>
-                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ new Date(Number(item.timestamp * 1000)).toGMTString() }}
+                        <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
                 </td>
                 <td>
                         <a href="'/address/' + item.from" style="max-width:150px" class="d-inline-block text-truncate">{{ item.from }}</a>
@@ -115,12 +115,18 @@ async function getAddressInfo(address) {
   address = address || self.address;
   var DataResult = await txsearch(address);
   for(var i=0; i<DataResult.result.length; i++){
+	  var myDate = Date.now()-DataResult.result[i].timeStamp*1000;
+	  var days = Number(myDate/86400000);
+	  var hours = myDate % (1000 * 60 * 60 * 24) / (1000 * 60 * 60);
+	  var minutes = myDate % (1000 * 60 * 60) / (1000 * 60);
+	  //var seconds = myDate % (1000 * 60)/ 1000);
+	  
           var info = {
                 hash: DataResult.result[i].hash,
-                timeStamp: DataResult.result[i].timeStamp,
+                timeStamp: Math.floor(days)+" day  " + Math.floor(hours) + " h  "+ Math.floor(minutes) + " m ",
                 from: DataResult.result[i].from,
                 to: DataResult.result[i].to,
-                value: DataResult.result[i].value,
+                value: DataResult.result[i].value/1000000000000000000 + " ETH",
                 gasUsed: DataResult.result[i].gasUsed
           };
           self.items.push(info);
