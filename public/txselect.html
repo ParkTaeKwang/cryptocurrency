@@ -37,19 +37,19 @@ if (typeof web3 !== 'undefined') {
                 <th width="20%">
                         TxHash
                 </th>
-                <th width="20%">
+                <th width="10%">
                         Age
                 </th>
-                <th width="20%">
+                <th width="30%">
                        From
                 </th>
-                <th width="20%">
+                <th width="30%">
                        To
                 </th>
-                <th width="20%">
+                <th width="5%">
                       Value
                 </th>
-                <th width="20%">
+                <th width="5%">
                       TxFee
                 </th>
 
@@ -71,10 +71,20 @@ if (typeof web3 !== 'undefined') {
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
                 </td>
                 <td>
-                        <a href="'/address/' + item.from" style="max-width:150px" class="d-inline-block text-truncate">{{ item.from }}</a>
+			<div v-if="item.from == <%=address%>">
+				<img src="../stylesheets/out.jpg">{{ item.from }}
+			</div>
+			<div v-else>
+				<img src="../stylesheets/in.jpg">
+				<a href="../address/ + 'item.from'" style="max-width:330px" class="d-inline-block text-truncate">{{ item.from }}</a>
+			</div>
                 </td>
-                <td>
-                        <a href="'/address/' + item.to" style="max-width:150px" class="d-inline-block text-truncate">{{ item.to }}</a>
+                <td>    <div v-if="item.to == <%=address%>">
+                                {{ item.to }}
+                        </div>
+                        <div v-else>
+                                <a href="../address/ + 'item.to'" style="max-width:330px" class="d-inline-block text-truncate">{{ item.to }}</a>
+                        </div>
                 </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.value }}
@@ -123,11 +133,11 @@ async function getAddressInfo(address) {
 	  
           var info = {
                 hash: DataResult.result[i].hash,
-                timeStamp: Math.floor(days)+" day  " + Math.floor(hours) + " h  "+ Math.floor(minutes) + " m ",
+                timeStamp: Math.floor(days)+"day " + Math.floor(hours) + "h "+ Math.floor(minutes) + "m ",
                 from: DataResult.result[i].from,
                 to: DataResult.result[i].to,
                 value: DataResult.result[i].value/1000000000000000000 + " ETH",
-                gasUsed: DataResult.result[i].gasUsed
+                gasUsed: (DataResult.result[i].gas * DataResult.result[i].gasPrice)/1000000000000000000
           };
           self.items.push(info);
 
