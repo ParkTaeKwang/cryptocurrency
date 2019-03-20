@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html><html lang="ko">
 <head>
 <title>The Ethereum Block Explorer</title>
@@ -74,27 +73,19 @@ if (typeof web3 !== 'undefined') {
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
                 </td>
-			<template v-if="item.from == <%=address%>">
-		<td>
+				<td>
 				<img src="../stylesheets/out.jpg">
-		</td><td>
+				</td>
+				<td>
 				{{ item.from }}
-		</td>
-			</template>
-
-			<template v-else>
-		<td>
-				<img src="../stylesheets/in.jpg">
-		</td><td>
-				<a v-bind:href="'/address/' + item.from" style="max-width:330px" class="d-inline-block text-truncate">{{ item.from }}</a>
-		</td>		
-			</template> 
-                        <template v-if="item.to == <%=address%>">
+				</td>
+                <td>    <div v-if="item.to == <%=address%>">
                                 {{ item.to }}
-                        </template>
-                        <template v-else>
+                        </div>
+                        <div v-else>
 				<a v-bind:href="'/address/' + item.to" style="max-width:330px" class="d-inline-block text-truncate">{{ item.to }}</a>
-                        </template>
+                        </div>
+                </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.value }}
                 </td>
@@ -149,6 +140,7 @@ async function getAddressInfo(address) {
                 gasUsed: (DataResult.result[i].gas * DataResult.result[i].gasPrice)/1000000000000000000
           };
           self.items.push(info);
+
   }
 }
 </script>
@@ -184,3 +176,4 @@ $('#searchForm').submit(function(evt) {
 });</script>
 </body>
 </html>
+
