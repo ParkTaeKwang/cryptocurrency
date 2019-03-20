@@ -35,25 +35,25 @@ if (typeof web3 !== 'undefined') {
 	<table class="table table-striped _table-bordered _table-dark w-100">
         <thead class="thead-light">
         <tr>
-                <th width="20%">
+                <th width="10%">
                         TxHash
                 </th>
-                <th width="5%">
+                <th width="40%">
                         Age
                 </th>
-		<th width="5%">
+		<th width="10%">
                        State 
                 </th>
-                <th width="30%">
+                <th width="10%">
                        From
                 </th>
-                <th width="30%">
+                <th width="10%">
                        To
                 </th>
-                <th width="5%">
+                <th width="10%">
                       Value
                 </th>
-                <th width="5%">
+                <th width="10%">
                       TxFee
                 </th>
 
@@ -69,7 +69,7 @@ if (typeof web3 !== 'undefined') {
         </tr>
         <tr v-for="item in items">
                 <td>
-			 <a v-bind:href="'/tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
+			 <a v-bind:href="'/tx/' + item.hash" style="max-width:50px" class="d-inline-block text-truncate">{{ item.hash }}</a>
                 </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
