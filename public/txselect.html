@@ -37,8 +37,11 @@ if (typeof web3 !== 'undefined') {
                 <th width="20%">
                         TxHash
                 </th>
-                <th width="10%">
+                <th width="5%">
                         Age
+                </th>
+		<th width="5%">
+                       State 
                 </th>
                 <th width="30%">
                        From
@@ -57,7 +60,7 @@ if (typeof web3 !== 'undefined') {
         </thead>
 	<tbody>
 		<tr v-if="items.length===0">
-                <td colspan="6">
+                <td colspan="7">
                         <div style="text-align:center">
                                 <i class="fas fa-2x fa-spinner fa-pulse"></i>
                         </div>
@@ -65,25 +68,26 @@ if (typeof web3 !== 'undefined') {
         </tr>
         <tr v-for="item in items">
                 <td>
-                        <a href="'../tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
+			 <a v-bind:href="'/tx/' + item.hash" style="max-width:200px" class="d-inline-block text-truncate">{{ item.hash }}</a>
                 </td>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.timeStamp }}
                 </td>
-                <td>
+		<td>
 			<div v-if="item.from == <%=address%>">
-				<img src="../stylesheets/out.jpg">{{ item.from }}
+				<img src="../stylesheets/out.jpg">
+				{{ item.from }}
 			</div>
 			<div v-else>
 				<img src="../stylesheets/in.jpg">
-				<a href="../address/ + 'item.from'" style="max-width:330px" class="d-inline-block text-truncate">{{ item.from }}</a>
-			</div>
-                </td>
+				<a v-bind:href="'/address/' + item.from" style="max-width:330px" class="d-inline-block text-truncate">{{ item.from }}</a>
+               		</div> 
+		</td>
                 <td>    <div v-if="item.to == <%=address%>">
                                 {{ item.to }}
                         </div>
                         <div v-else>
-                                <a href="../address/ + 'item.to'" style="max-width:330px" class="d-inline-block text-truncate">{{ item.to }}</a>
+				<a v-bind:href="'/address/' + item.to" style="max-width:330px" class="d-inline-block text-truncate">{{ item.to }}</a>
                         </div>
                 </td>
                 <td>
