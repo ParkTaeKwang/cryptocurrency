@@ -87,13 +87,17 @@ if (typeof web3 !== 'undefined') {
 				<img src="../stylesheets/in.jpg">
 		</td><td>
 				<a v-bind:href="'/address/' + item.from" style="max-width:330px" class="d-inline-block text-truncate">{{ item.from }}</a>
-		</td>		
 			</template> 
-                        <template v-if="item.to == <%=address%>">
+
+                <template v-if="item.to == <%=address%>">
+			<td>
                                 {{ item.to }}
+			</td>
                         </template>
                         <template v-else>
+			<td>
 				<a v-bind:href="'/address/' + item.to" style="max-width:330px" class="d-inline-block text-truncate">{{ item.to }}</a>
+			</td>
                         </template>
                 <td>
                         <i class="fas fa-lg fa-spinner fa-pulse"></i>{{ item.value }}
