@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+  body
+    h2= topic.title + ' - ' + topic.author
+    p= topic.description
+
+    form(action='/topic/'+topic.id+'/edit' method='post')
+      p
+        input(type='text' name='title' placeholder='title')
+      p
+        input(type='text' name='author' placeholder='author')
+      p
+        textarea(name='description')
+      p
+        input(type='submit')
+
+    form(action='/topic/'+topic.id+'/delete' method='post')
+      input(type='submit' value='삭제하기')
+
+
+
+
