@@ -1,138 +1,96 @@
-
 var express = require('express');
-var app = express();
+var session = require('express-session');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
-var conn = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'tkpark',
-  password : '1234',
-  database : 'tkpark'
+var bkfd2Password = require('pbkdf2-password');
+var MySQLStore = require('express-mysql-session')(session);
+var router = express.Router();
+var hasher = bkfd2Password();
+router.use(bodyParser.urlencoded( {
+	extended:false
+}));
+router.use(session( {
+	secret:'1234DSFs@adf1234!@#$asd',resave:false,saveUninitialized:true,store:new MySQLStore( {
+		host:'localhost',
+		user:'tkpark',
+		password:'1234',
+		database:'tkpark'
+	})
+}));
+router.get('/count',function(req,res) {
+	if(req.session.count) {
+		req.session.count++;
+	}
+	else {
+		req.session.count = 1;
+	}
+	res.send('count:'+req.session.count);
 });
-conn.connect();
-
-//app.set('views', './views_mysql');
-app.set('view engine', 'jade');
-app.locals.pretty = true;
-
-app.use(bodyParser.urlencoded({extended: false}));
-
-app.get('/topic/new', function(req, res) {
-  res.render('new');
+router.get('/auth/logout',function(req,res) {
+	delete req.session.displayName;
+	req.session.save(function () {
+		res.redirect('/welcome');
+	});
 });
-
-
-app.post('/topic', function(req, res) {
-  // 입력한 값 가져오기
-  var title = req.body.title;
-  var author = req.body.author;
-  var description = req.body.description;
-
-  // 쿼리 작성
-  var sql = 'INSERT INTO topic (title, description, author) values (?, ?, ?)';
-  var params = [title, description, author];
-
-  // 쿼리 실행
-  conn.query(sql, params, function(err, rows, fields) {
-    if(err)
-      console.log(err);
-    else {
-      res.send('Success!');
-    }
-  });
+router.get('/welcome',function(req,res) {
+	if(req.session.displayName) {
+		res.send(` <h1>Hello,$ {
+			req.session.displayName
+		}
+		</h1><a href="/auth/logout">logout</a>`);
+	}
+	else {
+		res.send(` <h1>Welcome</h1><ul><li><a href="/auth/login">Login</a></li><li><a href="/auth/register">Register</a></li></ul>`);
+	}
 });
-
-app.get('/topic', function(req, res) {
-  // 쿼리 작성 (id와 title 정보를 가져온다)
-  var sql = 'SELECT id, title FROM topic';
-
-  // 쿼리 실행
-  conn.query(sql, function(err, rows, fields) {
-    if(err)
-      console.log(err);
-    else {
-      res.render('view', {topics: rows}); // 가져온 정보를 jade 파일에 넘겨준다.
-    }
-  });
+var users = [ {
+	username:'egoing',password:'YGtPgY5CFTppQbZkzxAEmy1YDpytKt5RQ0EODPB4lrDE8Vza6GTLEncSuAnRdKBpf7IhB80/MWLUpb2cG9WJDtOUYdgyHOqNgnhl3Gkfieefbosqe67/FfWBKu4lh48OsZalG/EM8I0QmDrpN0dTsJMe+9JOdnaxM/MHM475tS8=',salt:'SaWnAN62dpdClvcVC9i7JiLOXAcjMo0oz/G5dGKoxvVBy1bT+SqI2MWkPkydfgWtqpymipRj8nFm3nbr0/g9BA==',displayName:'Egoing'
+}
+, {
+	username:'sayul2',password:'764a9b771f8a6365cfb7e6144a765c47',salt:'!!!@#DF#!W',displayName:'SAYUL2'
+}];
+router.post('/auth/login',function(req,res) {
+	var uname = req.body.username;
+	var pwd = req.body.password;
+	for (var i = 0;
+	i < users.length;
+	i++) {
+		var user = users[i];
+		if (uname === user.username) {
+			return hasher( {
+				password:pwd,salt:user.salt
+			}
+			,function (err,pass,salt,hash) {
+				if (hash === user.password) {
+					req.session.displayName = user.displayName;
+					req.session.save(function () {
+						res.redirect('/welcome');
+					})
+				}
+				else {
+					res.send('Who are you? <a href="/auth/login">login</a>');
+				}
+			});
+		}
+	}
 });
-
-
-
-app.get('/topic/:id', function(req, res) {
-  var id = req.params.id;
-  var sql = 'SELECT * from topic where id=?'
-  var params = [id];
-
-  conn.query(sql, params, function(err, rows, fields) {
-    if(err)
-      console.log(err);
-    else {
-      res.render('detail', {topic: rows[0]});
-    }
-  });
+router.get('/auth/login',function(req,res) {
+	var output = ` <h1>Login</h1><form action="/auth/login" method="post"><p><input type="text" name="username" placeholder="username"></p><p><input type="password" name="password" placeholder="password"></p><p><input type="submit"></p></form>`;
+	res.send(output);
 });
-
-
-app.post('/topic/:id/edit', function(req, res) {
-  // 전송된 정보 받아오기
-  var title = req.body.title;
-  var description = req.body.description;
-  var author = req.body.author;
-  var id = req.params.id;
-
-  // 쿼리 작성하기
-  var sql = 'UPDATE topic SET title=?, description=?, author=? WHERE id=?';
-  var params = [title, description, author, id];
-
-  // 쿼리 실행하기
-  conn.query(sql, params, function(err, rows, fields) {
-    if(err)
-      console.log(err);
-    else {
-      res.send('수정되었습니다.');
-    }
-  });
+router.post('/auth/register',function (req,res) {
+	users.push( {
+		username:req.body.username,password:req.body.password,displayName: req.body.displayName
+	});
+	req.session.displayName = req.body.displayName;
+	req.session.save(function() {
+		res.redirect('/welcome');
+	});
 });
 
-
-app.post('/topic/:id/delete', function(req, res) {
-  var id = req.params.id;
-
-  var sql = 'DELETE from topic WHERE id=?';
-  var params = [id];
-
-  conn.query(sql, params, function(err, row, fields) {
-    if(err)
-      console.log(err);
-    else {
-      res.send('삭제되었습니다.');
-    }
-  })
+router.get('/auth/register',function(req,res) {
+	var output = `<h1>Register</h1><form action = "/auth/register" method="post"><p><input type="text" name="username" placeholder="username"></p><p><input type="text" name="password" placeholder="password"></p><p><input type="text" name="displayName" placeholder="displayName"></p><p><input type="submit"></p></form>`;
+	res.send(output);
 });
 
 
-
-
-
-
-
-
-module.exports = app;
-/*
-// catch 404 and forward to error handler
-router.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-router.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.router.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-*/
+module.exports = router;

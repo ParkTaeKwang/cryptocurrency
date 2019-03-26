@@ -10,12 +10,15 @@
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
     "express": "~4.16.0",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.15.6",
     "http-errors": "^1.6.3",
     "jade": "^1.11.0",
     "json-stable-stringify": "^1.0.1",
     "lodash": "^4.17.10",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
+    "pbkdf2-password": "^1.2.1",
     "preconditions": "^2.2.1"
   },
   "devDependencies": {
