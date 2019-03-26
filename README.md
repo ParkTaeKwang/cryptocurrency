@@ -1,16 +1,13 @@
 
-## Account TX Expolorer Server (express.js)
+## 암호화폐 웹지갑
 
-이더리움web3.js API <-> nodejs <-> Contents 중계 역할을 하는 소스 .  
-nodejs + express + html로 구현되어 있음 .  
+ 회원을 가입 한 후 [비트코인, 이더리움, 트론]  동일한 Mnemonic (니모닉) 단어로부터 출금(send), 계좌조회(balance), 거래내역(transaction) 구현  
   
 
 #### Reference
-https://github.com/ethereum/web3.js
+https://iancoleman.io/bip39/
 
-https://github.com/anpigon/Ethereum-Block-Explorer
 
-https://ropsten.etherscan.io/
 
 #### history
 
@@ -19,34 +16,15 @@ https://ropsten.etherscan.io/
     OS : Ubuntu 18.04(ubuntu-18.04.1-desktop-amd64.iso)
     App : nodejs(v8.10.0), yarn(1.13.0)
 
-##### Execute
+##### DB
 
-```bash
-cd ~
 
-mkdir project
-
-cd project
-
-git clone https://github.com/etherblock.git
-
-cd etherblock/
-
-yarn start 
-실행 웹서비스 조회
-
-종료
-
-lsof -i tcp:3000
-
-kill -9 pid
-```
-
+    email : 
+    password : PBKDF2
+    Mnemonic : word 12
+    wallet address : BTC, ETH, TRX
 
 ##### url guide
 
-조회
-
-    http://192.168.0.118:3000/
 
 
