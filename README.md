@@ -27,16 +27,27 @@ https://iancoleman.io/bip39/
 ##### 테이블 생성
 
     CREATE TABLE `crypto_wallet` (
-  `idx` int(11) NOT NULL AUTO_INCREMENT,
-  `email_address` varchar(100) NOT NULL COMMENT '계정 이 메일',
-  `password` varchar(100) NOT NULL COMMENT '패스워드',
-  `mnemonic` varchar(150) NOT NULL COMMENT '리모닉',
-  `BTC` varchar(150) NOT NULL COMMENT '비트코인',
-  `ETH` varchar(150) NOT NULL COMMENT '이더리움',
-  `TRX` varchar(150) NOT NULL COMMENT '트론',
-  `regdate` datetime default current_timestamp,
-  PRIMARY KEY (`idx`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='암호화폐 지갑 테이블';
+    `idx` int(11) NOT NULL AUTO_INCREMENT,
+    `email_address` varchar(100) NOT NULL COMMENT '계정 이 메일',
+    `password` varchar(100) NOT NULL COMMENT '패스워드',
+    `mnemonic` varchar(150) NOT NULL COMMENT '리모닉',
+    `BTC` varchar(150) NOT NULL COMMENT '비트코인',
+    `ETH` varchar(150) NOT NULL COMMENT '이더리움',
+    `TRX` varchar(150) NOT NULL COMMENT '트론',
+    `regdate` datetime default current_timestamp,
+    PRIMARY KEY (`idx`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='암호화폐 지갑 테이블';
+    
+  
+  
+
+ 
+  
+ 
+  
+  
+
+ 
 
 
 
