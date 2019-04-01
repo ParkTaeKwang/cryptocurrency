@@ -40,7 +40,10 @@ https://iancoleman.io/bip39/
     
   
   
-
+    email : 
+    password : PBKDF2
+    Mnemonic : word 12
+    wallet address : BTC, ETH, TRX
  
   
  
