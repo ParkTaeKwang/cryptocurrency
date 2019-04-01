@@ -37,19 +37,22 @@ https://iancoleman.io/bip39/
     `regdate` datetime default current_timestamp,
     PRIMARY KEY (`idx`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='암호화폐 지갑 테이블';
-    
-  
-  
-    email : 
-    password : PBKDF2
-    Mnemonic : word 12
-    wallet address : BTC, ETH, TRX
- 
-  
- 
-  
-  
-
+        
+```sql
+MariaDB [tkpark]> desc crypto_wallet;
++---------------+--------------+------+-----+-------------------+---------------                                                                                             -+
+| Field         | Type         | Null | Key | Default           | Extra                                                                                                       |
++---------------+--------------+------+-----+-------------------+---------------                                                                                             -+
+| idx           | int(11)      | NO   | PRI | NULL              | auto_increment                                                                                              |
+| email_address | varchar(100) | NO   |     | NULL              |                                                                                                             |
+| password      | varchar(100) | NO   |     | NULL              |                                                                                                             |
+| mnemonic      | varchar(150) | NO   |     | NULL              |                                                                                                             |
+| BTC           | varchar(150) | NO   |     | NULL              |                                                                                                             |
+| ETH           | varchar(150) | NO   |     | NULL              |                                                                                                             |
+| TRX           | varchar(150) | NO   |     | NULL              |                                                                                                             |
+| regdate       | datetime     | YES  |     | CURRENT_TIMESTAMP |                                                                                                             |
++---------------+--------------+------+-----+-------------------+---------------                                                         
+```
  
 
 
