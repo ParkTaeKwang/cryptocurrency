@@ -28,6 +28,7 @@ https://iancoleman.io/bip39/
 
     CREATE TABLE `crypto_wallet` (
     `idx` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(10) NOT NULL COMMENT '이름',
     `email_address` varchar(100) NOT NULL COMMENT '계정 이 메일',
     `password` varchar(100) NOT NULL COMMENT '패스워드',
     `mnemonic` varchar(150) NOT NULL COMMENT '리모닉',
@@ -44,6 +45,7 @@ MariaDB [tkpark]> desc crypto_wallet;
 | Field         | Type         | Null | Key | Default           | Extra          |
 +---------------+--------------+------+-----+-------------------+----------------+
 | idx           | int(11)      | NO   | PRI | NULL              | auto_increment |
+| name          | varchar(10)  | NO   |     | NULL              |                |
 | email_address | varchar(100) | NO   |     | NULL              |                |
 | password      | varchar(100) | NO   |     | NULL              |                |
 | mnemonic      | varchar(150) | NO   |     | NULL              |                |
