@@ -1,38 +1,58 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>Login</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-  </head>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
+    <meta charset="utf-8" />
+    <title>index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
 
-  <body>
-  <div class="jumbotron">
-    <h1>Login</h1>      
-    <p>The website  send  to cryptocurrency Bitcoin, Ethereum , Tron from a  web wallet.</p>
-  </div>
-  <div class="container">
-      <form>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Password</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
-      </form>
+<body>
+    <div class="jumbotron">
+        <h1>index</h1>
+        <p>The website  send  to cryptocurrency Bitcoin, Ethereum , Tron from a  web wallet.</p>
     </div>
+    <div class="container">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">result</label>
+                    <input type="text" class="form-control" id="result" placeholder="Password">
+                </div>
+            </div>
+            <button onclick='click_exec()' type="button" class="btn btn-primary">Sign in</button>
+        </form>
+    </div>
+</body>
 
-    <script>
-      function msg() {
-        alert("Hello world!");
-      }
-    </script>
+<script>
+        function click_exec() {
 
-  </body>
+        var email = $('#email').val();
+        var password = $('#password').val();
+        $.post("login", {
+            email,
+            password
+        })
+            .done(function (data) {
+                if (data.result == 'true') {
+            document.getElementById("result").value = "success";
+        } else {
+            document.getElementById("result").value = "error";
+        }
+    })
+
+    }
+</script>
 </html>
