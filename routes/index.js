@@ -6,18 +6,16 @@ var router = express.Router();
 
 // render -> login
 router.get('/', (req, res) => {
-    res.sendfile('/public/index.html');
+    res.sendfile('public/login.html');
 });
 
 
 // API -> login
 router.post('/login', (req, res) => {
 
-    var input_id = req.body['f_address'];
-    var input_pw = req.body['t_address'];
+    var input_id = req.body['email'];
+    var input_pw = req.body['password'];
 
-    console.log('input_id -> ', input_id);
-    console.log('input_pw -> ', input_pw);
 
     if (input_id == 'admin' && input_pw == '1234') {
         res.json({ 'result': 'true' });
