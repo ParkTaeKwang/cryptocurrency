@@ -41,7 +41,6 @@ router.get('/', (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-    res.sendfile('public/login.html');
     var idPass = "$2b$05$YKrQhVu5Hai5ml4sIUmoIue2jTYmgK2mQDRemS3NqeteJhYZRxpKq"; // hash("aaaa");
     var input_id = req.body['email'];
     var input_pw = req.body['password'];
@@ -51,8 +50,10 @@ router.post('/login', async (req, res) => {
     try {
         if (input_id == 'admin' && result == true) {
             res.json({ 'result': 'true' });
+            return false;
         } else {
             res.json({ 'result': 'false' });
+            return false;
         }
     } catch (error) {
         console.error(error);
