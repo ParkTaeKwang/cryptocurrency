@@ -4,32 +4,27 @@ var request = require('request');
 var express = require('express');
 var router = express.Router();
 var session = require('express-session');
+var cookie = require('cookie-parser'); 
+const app = express()
 
 const bcrypt = require('bcrypt');
 
 
 // render -> login
 router.get('/', (req, res) => {
+    /*
+    var session = require('express-session');
+
+    app.use(session({
+        secret: '@#@$MYSIGN#@$#$',
+        resave: false,
+        saveUninitialized: true
+    }));
+
+    var sess = req.session;
+    console.log(sess.secret);
+    */
     res.sendfile('public/login.html');
-});
-
-router.get('/hash', (req, res) => {
-const password = "aaaa";
-const wrongPass = "aaaaa";
-
-// 디비에 저장되야 할 정보
-//const salt = "soulSP9v7WXozfzY9VHpuafuhjk2TBCJ1LHVqdJ73wStU";
-const hash = bcrypt.hashSync("aaaa", 5);
-       
-
-// 사용자가 입력한 패스워드
-const result1 = bcrypt.compareSync(password, hash);
-const result2 = bcrypt.compareSync(wrongPass, hash);
-
-
-console.log("hash", hash);
-console.log("password ", result1);
-console.log("wrongPass ", result2);
 });
 
 // API -> login
@@ -40,16 +35,19 @@ router.post('/login', async (req, res) => {
     }
     else {
     */
-
+    var idPass = "$2b$05$YKrQhVu5Hai5ml4sIUmoIue2jTYmgK2mQDRemS3NqeteJhYZRxpKq"; // hash("aaaa");
     var input_id = req.body['email'];
     var input_pw = req.body['password'];
+
+    const result = bcrypt.compareSync(input_pw, idPass);  // input pw if hash("aaaa");
+
     try {
-        const hash = await bcrypt.hash(input_pw, 12);
-        console.log(hash);
-                                    
-        if (input_id == 'admin' && input_pw == '1234') {
-            
-                res.json({ 'result': 'true' });
+        if (input_id == 'admin' && result == true) {    
+            req.session.email = {
+                
+                email: email
+            };
+            res.json({ 'result': req.session.email });
             } else {
                 res.json({ 'result': 'false' });
             }
@@ -60,6 +58,4 @@ router.post('/login', async (req, res) => {
 
 });
 
-
 module.exports = router;
-
