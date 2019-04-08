@@ -9,12 +9,12 @@ var router = express.Router();
 var app = express();
 
 router.use(session({
-    secret: 'keyboard cat',
+    secret: 'keyboard cat111@@',
     resave: false,
     saveUninitialized: true
 }))
 
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
     if (!req.session.views) {
         req.session.views = {}
     }
@@ -27,11 +27,11 @@ router.use(function (req, res, next) {
 })
 
 
-router.get('/foo', function (req, res, next) {
+router.get('/foo', (req, res, next) => {
     res.send('you viewed this page ' + req.session.views['/foo'] + ' times')
 })
 
-router.get('/bar', function (req, res, next) {
+router.get('/bar', (req, res, next) => {
     res.send('you viewed this page ' + req.session.views['/bar'] + ' times')
 })
 
