@@ -31,29 +31,30 @@
                     <input type="text" class="form-control" id="result" placeholder="Password">
                 </div>
             </div>
-            <button onclick='click_exec()' type="button" class="btn btn-primary">Sign in</button>
+            <button onclick='click_exec()' type="button" class="btn btn-primary">Login</button>
+            <button onclick='logout()' type="button" class="btn btn-primary">Logout</button>
         </form>
     </div>
 </body>
 
 <script>
-        function click_exec() {
+function click_exec() {
 
-        var f_address = $('#email').val();
-        var t_address = $('#password').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
         $.post("login", {
-            f_address,
-        t_address
-    })
-            .done(function (data) {
-                if (data.result == 'true') {
-            document.getElementById("result").value = "success";
-        } else {
-            document.getElementById("result").value = "error";
-        }
-    })
+            email,
+            password
+        })
+        .done(function (data) {              
+             document.getElementById("result").value = data.result;
+        })
+}
 
-    }
+function logout() {
+        location.href = "/logout";
+ }
+
 </script>
 </html>
 
