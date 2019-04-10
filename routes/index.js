@@ -1,11 +1,11 @@
 'use sztrict';
-
+var path = require('path');
 var express = require('express');
 var parseurl = require('parseurl');
 var session = require('express-session'); // 세션정보는 메모리에 저장함
 var bcrypt = require('bcrypt');
 var router = express.Router();
-
+var bodyParser = require('body-parser');
 var app = express();
 
 router.use(session({
@@ -35,8 +35,8 @@ router.get('/bar', (req, res, next) => {
     res.send('you viewed this page ' + req.session.views['/bar'] + ' times');
 })
 
-router.get('/', (req, res) => {
-    res.sendfile('public/login.html');
+router.get('/', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
 router.get('/logout', (req, res) => {
@@ -57,18 +57,18 @@ router.get('/logout', (req, res) => {
 
 
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, bodyParser) => {
 
     var idPass = "$2b$05$YKrQhVu5Hai5ml4sIUmoIue2jTYmgK2mQDRemS3NqeteJhYZRxpKq"; // hash("aaaa");
-    var input_id = req.body['email'];
-    var input_pw = req.body['password'];
+    var input_id = req.body.email;
+    var input_pw = req.body.password;
     var sess;
     sess = req.session;
 
     const result = bcrypt.compareSync(input_pw, idPass);  // input pw if hash("aaaa");
        
     if (sess.username) {
-        res.json({ 'result': sess.username + '님이 로그인 하셨습니다2.' });
+        res.json({ 'result': sess.username + '님이 로그인 하셨습니다.2' });
         return false;
     } else {
         try {
