@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-
+var Mnemonic = require('bitcore-mnemonic');
 var app = express();
 
 const conn = mysql.createConnection({
@@ -67,8 +67,6 @@ router.get('/', function (req, res) {
 
 
 router.get('/mnemonic/', function (req, res) {
-    var Mnemonic = require('bitcore-mnemonic');
-
 // 니모닉 코드 생성
 var code = new Mnemonic(Mnemonic.Words.ENGLISH);
 console.log(code.toString());
@@ -96,6 +94,7 @@ router.get('/memberJoin', (req, res) => {
     }
 });
 
+
 // 회원 가입처리
 router.post('/memberJoin', (req, res) => {
     console.log('POST : /memberJoin 회원가입처리 요청');
@@ -110,7 +109,6 @@ router.post('/memberJoin', (req, res) => {
         const member_name = req.body.memberName;
         const mnemonic = req.body.mnemonic;
 
-
         const saltRounds = 10; // default 10
         const password = member_pw;
 
@@ -118,27 +116,28 @@ router.post('/memberJoin', (req, res) => {
         const hash = bcrypt.hashSync(password, salt);
 
         // id 중복 확인
-        conn.query('SELECT email_address FROM crypto_wallet WHERE email_address=?'
-            , [member_id], (err, rs) => {
-                if (rs[0]) {
-                    console.log('중복된 아이디');
-                    res.redirect('/memberJoin');
+        var result = conn.query('SELECT email_address FROM crypto_wallet WHERE email_address="?"', [member_id],function(err, rs){
+            console.log(err);    
+        });
+    
+        if (result[0]) {
+            console.log('중복된 아이디');
+            res.redirect('/memberJoin');
+        } else {
+            console.log('아이디가 중복되지 않습니다. 계속 진행');
+            // 회원 가입 처리
+            conn.query('INSERT INTO crypto_wallet(email_address, password, name, mnemonic) VALUES(?,?,?,?)'
+            , [member_id, hash, member_name, mnemonic], (err, rs) => {
+                if (err) {
+                console.log(err)
+                console.log('가입 실패!');
+                res.end();
                 } else {
-                    console.log('아이디가 중복되지 않습니다. 계속 진행');
-                    // 회원 가입 처리
-                    conn.query('INSERT INTO crypto_wallet(email_address, password, name, mnemonic) VALUES(?,?,?,?)'
-                        , [member_id, hash, member_name, mnemonic], (err, rs) => {
-                            if (err) {
-                                console.log(err)
-                                console.log('가입 실패!');
-                                res.end();
-                            } else {
-                                console.log('가입 완료!');
-                                res.redirect('/login');
-                            }
-                        });
+                console.log('가입 완료!');
+                res.redirect('/login');
                 }
-            });
+                });
+            }      
     }
 });
 
