@@ -88,7 +88,11 @@ router.get('/memberJoin', (req, res) => {
         console.log('현재 로그인 상태입니다.');
         res.redirect('/boardList');
     } else {
-        res.render('memberJoin');
+        var code = new Mnemonic(Mnemonic.Words.ENGLISH);
+        //console.log("123");
+        res.render('memberJoin', {
+            abc: code.toString()            
+        });
     }
 });
 
