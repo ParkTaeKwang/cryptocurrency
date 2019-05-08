@@ -118,7 +118,7 @@ router.post('/memberJoin', (req, res) => {
         const hash = bcrypt.hashSync(password, salt);
 
         // id 중복 확인
-        conn.quer('SELECT email_address FROM crypto_wallet WHERE email_address=?'
+        conn.query('SELECT email_address FROM crypto_wallet WHERE email_address=?'
             , [member_id], (err, rs) => {
                 if (rs[0]) {
                     console.log('중복된 아이디');
