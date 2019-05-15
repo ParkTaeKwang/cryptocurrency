@@ -200,22 +200,5 @@ router.get('/wallet', (req, res) => {
 
 
 
-router.get('/test2', function(req, res){
-    var client = require('cheerio-httpcli'); 
-    let url = 'https://onland.kbstar.com/quics?page=okbland&QSL=F'; var param = {}; 
-    client.fetch(url, param, function(err, $, res) {
-        if(err) {
-            console.log(err);
-            return;
-        }
-        $(".money").each(function(post) {
-            console.log($(this).text());
-        }
-        );
-    }
-    )
-});
-
-
 
 module.exports = router;
