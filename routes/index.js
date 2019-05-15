@@ -8,6 +8,10 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var Mnemonic = require('bitcore-mnemonic');
+var bip39 = require('bip39');
+var ethUtil = require('ethereumjs-util');
+var web3 = require('web3');
+var hdkey = require('ethereumjs-wallet/hdkey');
 var app = express();
 
 const conn = mysql.createConnection({
@@ -38,13 +42,6 @@ router.use((req, res, next) => {
 })
 
 
-router.get('/foo', (req, res, next) => {
-    res.send('you viewed this page ' + req.session.views['/foo'] + ' times');
-})
-
-router.get('/bar', (req, res, next) => {
-    res.send('you viewed this page ' + req.session.views['/bar'] + ' times');
-})
 
 
 router.get('/logout', (req, res) => {
@@ -62,19 +59,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/', function (req, res) {
-    res.send('Hello home page <br/><a href="/login">로그인</a><br/> <a href="/logout">로그아웃</a> ');;
-});
-
-
-router.get('/mnemonic/', function (req, res) {
-// 니모닉 코드 생성
-var code = new Mnemonic(Mnemonic.Words.ENGLISH);
-console.log(code.toString());
-
-// 니모닉 코드에서 개인키 생성
-var xPriKey = code.toHDPrivateKey();
-console.log(xPriKey);
-
+    res.send('Hello home page <br/><a href="/login">로그인</a><br/> <a href="/logout">로그아웃</a> ');
 });
 
 
@@ -85,12 +70,31 @@ router.get('/memberJoin', (req, res) => {
     if (req.session.username) {
         console.log('현재 로그인 상태입니다.');
         res.redirect('/boardList');
-    } else {
+    } else {       
+
         var code = new Mnemonic(Mnemonic.Words.ENGLISH);
-        //console.log("123");
+        console.log('code', code); // 니모닉
+
+        var xPriKey = code.toHDPrivateKey('', 'testnet'); 
+        console.log('xPriKey:', xPriKey); // xPriKey
+
+
+        var BTCprivkey = xPriKey.deriveChild("m/44'/0'/0'/0/0"); // 서명할 개인키
+        console.log(' BTCprivkey:',  BTCprivkey); // BTCprivkey
+
+        var privkey = xPriKey.deriveChild("m/44'/60'/0'/0/0").privateKey; // 서명할 개인키
+        console.log('privkey:', privkey); // prvkey
+        
+        var fromAddress = '0x' + ethUtil.privateToAddress(privkey.toBuffer()).toString('hex'); 
+
+        console.log('fromAddress:', fromAddress); // 이더리움 주소
+
+
+
         res.render('memberJoin', {
-            abc: code.toString()            
-        });
+            WORDLISTS: code,
+            BTC_PK: BTCprivkey,
+            ETH_PK: '0x' + privkey       });
     }
 });
 
@@ -108,6 +112,8 @@ router.post('/memberJoin', (req, res) => {
         const member_pw = req.body.memberPw;
         const member_name = req.body.memberName;
         const mnemonic = req.body.mnemonic;
+        const btc = req.body.btc;
+        const eth = req.body.eth;
 
         const saltRounds = 10; // default 10
         const password = member_pw;
@@ -126,8 +132,7 @@ router.post('/memberJoin', (req, res) => {
         } else {
             console.log('아이디가 중복되지 않습니다. 계속 진행');
             // 회원 가입 처리
-            conn.query('INSERT INTO crypto_wallet(email_address, password, name, mnemonic) VALUES(?,?,?,?)'
-            , [member_id, hash, member_name, mnemonic], (err, rs) => {
+            conn.query('INSERT INTO crypto_wallet(email_address, password, name, mnemonic, btc, eth) VALUES(?, ?, ?, ?, ?, ?)', [member_id, hash, member_name, mnemonic, btc, eth], (err, rs) => {
                 if (err) {
                 console.log(err)
                 console.log('가입 실패!');
@@ -182,13 +187,35 @@ router.post('/login', async (req, res, bodyParser) => {
     })    
 });
 
-
 router.get('/boardList', (req, res) => {
     res.render('boardList', {
         text: 'This is boardList page',
         whoami: req.session.username
     });
 });
+
+router.get('/wallet', (req, res) => {
+    res.render('wallet');
+});
+
+
+
+router.get('/test2', function(req, res){
+    var client = require('cheerio-httpcli'); 
+    let url = 'https://onland.kbstar.com/quics?page=okbland&QSL=F'; var param = {}; 
+    client.fetch(url, param, function(err, $, res) {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        $(".money").each(function(post) {
+            console.log($(this).text());
+        }
+        );
+    }
+    )
+});
+
 
 
 module.exports = router;
