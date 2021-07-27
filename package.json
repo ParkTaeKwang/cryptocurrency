@@ -7,8 +7,12 @@
   },
   "dependencies": {
     "async": "^2.6.1",
+    "bcrypt": "^5.0.1",
+    "bip39": "^3.0.4",
+    "bitcore-mnemonic": "^8.25.10",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
+    "ethereumjs-util": "^7.1.0",
     "express": "~4.16.0",
     "express-mysql-session": "^2.1.0",
     "express-session": "^1.15.6",
@@ -19,7 +23,9 @@
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
     "pbkdf2-password": "^1.2.1",
-    "preconditions": "^2.2.1"
+    "preconditions": "^2.2.1",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.4.0"
   },
   "devDependencies": {
     "npmlog": "^4.1.2"

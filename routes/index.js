@@ -11,7 +11,6 @@ var Mnemonic = require('bitcore-mnemonic');
 var bip39 = require('bip39');
 var ethUtil = require('ethereumjs-util');
 var web3 = require('web3');
-var hdkey = require('ethereumjs-wallet/hdkey');
 var app = express();
 
 const conn = mysql.createConnection({
