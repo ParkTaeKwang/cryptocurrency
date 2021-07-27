@@ -27,7 +27,7 @@ jobs:
             - v1-dependencies-
 
       - run: yarn install
-      - run: yarn bcript
+      - run: yarn add bcript
 
       - save_cache:
           paths:
