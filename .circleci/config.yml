@@ -2,8 +2,10 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2.2
+version: 2.1
 orbs:
+  aws-cli: circleci/aws-cli@0.1.15
+  aws-ecr: circleci/aws-ecr@6.12.2
   slack: circleci/slack@4.3
 jobs:
   build:
