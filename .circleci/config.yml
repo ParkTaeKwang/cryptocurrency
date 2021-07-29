@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2.1
+version: 2.2
 orbs:
   slack: circleci/slack@4.3
 jobs:
@@ -29,8 +29,26 @@ jobs:
             - v1-dependencies-
 
       - run: yarn install
-
-
+      - slack/notify:
+          event: fail
+          mentions: '@Frontend-team'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+               "blocks": [
+                  {
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": "🎉 빌드 및 업로드 성공! Docker 배포 진행중.."
+                      }
+                  }
+               ]
+            }
+          template: success_tagged_deploy_1
+          
       - save_cache:
           paths:
             - node_modules
