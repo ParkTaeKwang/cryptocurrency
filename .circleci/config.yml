@@ -4,9 +4,11 @@
 #
 version: 2.1
 orbs:
+  aws-cli: circleci/aws-cli@0.1.15
+  aws-ecr: circleci/aws-ecr@6.12.2
   slack: circleci/slack@4.3
 jobs:
-  dekey/dekey-build:
+  dekey-build:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.19
@@ -53,11 +55,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-
 workflows:
-  version: 2
-  build-and-deploy:
+  Dekey Workflow:
     jobs:
-      - dekey/dekey-build:
-          context: slack-secrets
+      - dekey-build  
