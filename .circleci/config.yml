@@ -58,4 +58,6 @@ jobs:
 workflows:
   Dekey Workflow:
     jobs:
-      - dekey-build  
+      - dekey-build :
+          context: slack-secrets
+
