@@ -55,3 +55,8 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+workflows:
+  build-and-deploy:
+    jobs:
+      - jobs:
+          context: slack-secrets
