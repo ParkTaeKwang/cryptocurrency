@@ -11,7 +11,8 @@ jobs:
   dekey-build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10.19
+      #- image: circleci/node:10.19
+      image: kopi2642/ubuntu-2004:iesay
 
         auth:
           username: kopi2642
