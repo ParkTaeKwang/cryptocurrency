@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^2.6.4",
     "bcrypt": "^5.0.1",
     "bip39": "^3.0.4",
     "bitcore-mnemonic": "^8.25.10",
